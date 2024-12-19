@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur de mot de passe</title>
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4A90E2, #50E3C2);
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #4A90E2;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .button-container {
+            margin: 20px 0;
+        }
+
+        button {
+            background-color: #4A90E2;
+            color: #fff;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0px 5px 15px rgba(74, 144, 226, 0.3);
+        }
+
+        button:hover {
+            background-color: #50E3C2;
+            box-shadow: 0px 10px 20px rgba(74, 144, 226, 0.4);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        #resultat {
+            background-color: #f4f4f4;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1.5rem;
+            color: #333;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            width: 100%;
+        }
+
+        #copyButton {
+            background-color: transparent;
+            color: #4A90E2;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            margin-left: 10px;
+            transition: color 0.3s ease;
+        }
+
+        #copyButton:hover {
+            color: #50E3C2;
+        }
+
+        .language-switcher {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .language-switcher button {
+            background: #fff;
+            color: #4A90E2;
+            border: 2px solid #4A90E2;
+            padding: 10px 15px;
+            font-size: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .language-switcher button:hover {
+            background: #4A90E2;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 id="title">Générateur de mot de passe</h1>
+        <div class="button-container">
+            <button id="generateButton" onclick="genererMdp()">Générer un mot de passe</button>
+        </div>
+        <div id="resultat">
+            <span id="mdp"></span>
+            <button id="copyButton" onclick="copierMdp()" disabled><i class="fas fa-copy"></i></button>
+        </div>
+    </div>
+
+    <div class="language-switcher">
+        <button onclick="setLanguage('fr')">Français</button>
+        <button onclick="setLanguage('en')">English</button>
+    </div>
+
+    <script>
+        const translations = {
+            fr: {
+                title: "Générateur de mot de passe",
+                generateButton: "Générer un mot de passe",
+            },
+            en: {
+                title: "Password Generator",
+                generateButton: "Generate Password",
+            }
+        };
+
+        let currentLanguage = "fr";
+
+        function setLanguage(language) {
+            currentLanguage = language;
+            document.getElementById("title").innerText = translations[language].title;
+            document.getElementById("generateButton").innerText = translations[language].generateButton;
+        }
+
+        function genererMdp() {
+            const listeSymboles = [",", "?", ".", ";", "/", ":", "!"];
+            const listeConsonnes = ["z", "r", "t", "p", "q", "s", "d", "f", "g", "h", "j", "k", "l", "m", "w", "x", "c", "v", "b", "n"];
+            const listeConsonnesMaj = ["Z", "R", "T", "P", "Q", "S", "D", "F", "G", "H", "J", "K", "L", "M", "W", "X", "C", "V", "B", "N"];
+            const listeVoyelles = ["a", "e", "i", "o", "u", "y"];
+
+            function choixAleatoire(liste) {
+                return liste[Math.floor(Math.random() * liste.length)];
+            }
+
+            const mdp = [
+                choixAleatoire(listeConsonnesMaj),
+                choixAleatoire(listeVoyelles),
+                choixAleatoire(listeConsonnes),
+                choixAleatoire(listeConsonnes),
+                choixAleatoire(listeVoyelles),
+                choixAleatoire(listeConsonnes),
+                Math.floor(Math.random() * 10),
+                Math.floor(Math.random() * 10),
+                choixAleatoire(listeSymboles)
+            ].join("");
+
+            document.getElementById("mdp").innerText = mdp;
+            document.getElementById("copyButton").disabled = false;
+        }
+    </script>
+</body>
+</html>
